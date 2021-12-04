@@ -3,6 +3,10 @@ import logging
 from datetime import datetime
 
 import requests
+import grequests
+from gevent import monkey
+monkey.patch_all()
+
 from flask import Flask, Response
 from flask import request, render_template, jsonify
 from flask_cors import CORS
@@ -35,6 +39,41 @@ def get_order_details(orderID):
             response = requests.get(u)
             collect_responses.append(response.status_code)
             collect_details.append(json.loads(response.text))
+
+        for r in collect_responses:
+            if r!=200:
+                raise Exception("Failed to GET Data!")
+
+
+        res = strip_data(collect_details)
+        res = json.dumps(res, default=str)
+        rsp = Response(res, status=200, content_type='application/JSON')
+        print(f"Elapsed Time: {datetime.now() - s}")
+        return rsp
+
+    except Exception as e:
+        print(f"Path: /orderDetails\nException: {e}")
+        rsp = Response("INTERNAL ERROR", status=500, content_type='text/plain')
+
+
+@app.route('/orderDetailsAsync/<orderID>', methods=["GET"])
+def get_order_details_async(orderID):
+    try:
+        s = datetime.now()
+        # inputs = rest_utils.RESTContext(request)
+        data = get_order_ids(orderID)
+        urls = generate_urls(data)
+
+        collect_details = []
+        collect_responses = []
+
+        greqs = (grequests.get(u) for u in urls)
+        gres = grequests.map(greqs)
+
+        for g in gres:
+            collect_responses.append(g.status_code)
+            collect_details.append(json.loads(g.text))
+
 
         for r in collect_responses:
             if r!=200:
