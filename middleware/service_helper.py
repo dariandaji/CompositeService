@@ -1,3 +1,27 @@
+import requests
+import json
+
+def get_order_ids(orderID):
+    try:
+        url_call = "http://192.168.0.119:5002/orders/" + str(orderID)
+        response = requests.get(url_call)
+        if response.status_code==200:
+            details = json.loads(response.text)
+
+            return {
+                "userID": details.get('data')[0].get('customer'),
+                "productID": details.get('data')[0].get('part'),
+                "orderID": orderID
+            }
+        else:
+            raise Exception("Could not GET order details!")
+
+    except:
+        raise Exception("GET request failed!")
+
+
+
+
 def generate_urls(data):
     # replace with endpoint urls
     url_dict = {

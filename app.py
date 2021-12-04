@@ -8,7 +8,7 @@ from flask import request, render_template, jsonify
 from flask_cors import CORS
 
 import utils.rest_utils as rest_utils
-from middleware.service_helper import generate_urls, strip_data
+from middleware.service_helper import generate_urls, strip_data, get_order_ids
 
 from pprint import pprint
 
@@ -21,12 +21,12 @@ CORS(app)
 #     "orderID": 1
 # }
 
-@app.route('/orderDetails', methods=["GET"])
-def get_order_details():
+@app.route('/orderDetails/<orderID>', methods=["GET"])
+def get_order_details(orderID):
     try:
         s = datetime.now()
-        inputs = rest_utils.RESTContext(request)
-        data = inputs.data
+        # inputs = rest_utils.RESTContext(request)
+        data = get_order_ids(orderID)
         urls = generate_urls(data)
 
         collect_details = []
@@ -44,7 +44,7 @@ def get_order_details():
         res = strip_data(collect_details)
         res = json.dumps(res, default=str)
         rsp = Response(res, status=200, content_type='application/JSON')
-        print("Running Time: ")
+        print(f"Elapsed Time: {datetime.now() - s}")
         return rsp
 
     except Exception as e:
