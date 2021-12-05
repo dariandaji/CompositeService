@@ -25,7 +25,7 @@ def get_order_ids(orderID):
 def generate_urls(data):
     # replace with endpoint urls
     url_dict = {
-        "UserAddress": "http://192.168.0.119:5000/",
+        "UserAddress": "http://127.0.0.1:5000/",
         "Product": "http://192.168.0.119:5001/",
         "Orders": "http://192.168.0.119:5002/",
     }
