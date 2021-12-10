@@ -3,7 +3,9 @@ import json
 
 def get_order_ids(orderID):
     try:
-        url_call = "http://192.168.0.119:5002/orders/" + str(orderID)
+        # local testing
+        # url_call = "http://192.168.0.119:5002/orders/" + str(orderID)
+        url_call = "http://44.197.87.209:5000/orders/" + str(orderID)
         response = requests.get(url_call)
         if response.status_code==200:
             details = json.loads(response.text)
@@ -25,12 +27,13 @@ def get_order_ids(orderID):
 def generate_urls(data):
     # replace with endpoint urls
     url_dict = {
+        # Local testing
         # "UserAddress": "http://127.0.0.1:5000/",
         # "Product": "http://192.168.0.119:5001/",
         # "Orders": "http://192.168.0.119:5002/",
-        "UserAddress": "http://eb2-env.eba-khxuypq3.us-east-1.elasticbeanstalk.com/",
-        "Product": "http://3.81.181.29:5000",
-        "Orders": "http://44.197.87.209:5000",
+        "UserAddress": "http://Eb2-env.eba-khxuypq3.us-east-1.elasticbeanstalk.com/",
+        "Product": "http://3.81.181.29:5000/",
+        "Orders": "http://44.197.87.209:5000/",
     }
 
     if data.get('userID', False) and data.get('productID', False) and data.get('orderID'):

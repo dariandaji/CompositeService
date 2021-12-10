@@ -38,6 +38,8 @@ def get_order_details(orderID):
             collect_responses.append(response.status_code)
             collect_details.append(json.loads(response.text))
 
+        collect_details = list(map(lambda x: {'data': x} if isinstance(x, list) else x, collect_details))
+
         for r in collect_responses:
             if r!=200:
                 raise Exception("Failed to GET Data!")
@@ -50,7 +52,7 @@ def get_order_details(orderID):
         return rsp
 
     except Exception as e:
-        print(f"Path: /orderDetails\nException: {e}")
+        print(f"Path: /orderDetails/<orderID>\nException: {e}")
         rsp = Response("INTERNAL ERROR", status=500, content_type='text/plain')
 
 
@@ -146,4 +148,4 @@ def after_request(response):
     return response
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5003)
+    app.run(host="127.0.0.1", port=5003)
