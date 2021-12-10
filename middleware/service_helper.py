@@ -1,9 +1,18 @@
 import requests
 import json
 
+url_dict = {
+        # "UserAddress": "http://127.0.0.1:5000/",
+        # "Product": "http://192.168.0.119:5001/",
+        # "Orders": "http://192.168.0.119:5002/",
+        "UserAddress": "http://eb2-env.eba-khxuypq3.us-east-1.elasticbeanstalk.com",
+        "Product": "http://3.81.181.29:5000",
+        "Orders": "http://44.197.87.209:5000",
+    }
+
 def get_order_ids(orderID):
     try:
-        url_call = "http://192.168.0.119:5002/orders/" + str(orderID)
+        url_call = url_dict['Orders']+"/orders/" + str(orderID)
         response = requests.get(url_call)
         if response.status_code==200:
             details = json.loads(response.text)
@@ -24,21 +33,14 @@ def get_order_ids(orderID):
 
 def generate_urls(data):
     # replace with endpoint urls
-    url_dict = {
-        # "UserAddress": "http://127.0.0.1:5000/",
-        # "Product": "http://192.168.0.119:5001/",
-        # "Orders": "http://192.168.0.119:5002/",
-        "UserAddress": "http://eb2-env.eba-khxuypq3.us-east-1.elasticbeanstalk.com/",
-        "Product": "http://3.81.181.29:5000",
-        "Orders": "http://44.197.87.209:5000",
-    }
+    
 
     if data.get('userID', False) and data.get('productID', False) and data.get('orderID'):
         url_list = []
-        url_list.append(url_dict['UserAddress'] + 'users/' + str(data['userID']))
-        url_list.append(url_dict['UserAddress'] + 'users/' + str(data['userID']) + '/address')
-        url_list.append(url_dict['Product'] + 'products/' + str(data['productID']))
-        url_list.append(url_dict['Orders'] + 'orders/' + str(data['orderID']))
+        url_list.append(url_dict['UserAddress'] + '/users/' + str(data['userID']))
+        url_list.append(url_dict['UserAddress'] + '/users/' + str(data['userID']) + '/address')
+        url_list.append(url_dict['Product'] + '/products/' + str(data['productID']))
+        url_list.append(url_dict['Orders'] + '/orders/' + str(data['orderID']))
         return url_list
 
     else:

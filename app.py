@@ -6,8 +6,8 @@ import re
 
 import requests
 import grequests
-from gevent import monkey
-monkey.patch_all()
+#from gevent import monkey
+#monkey.patch_all()
 
 from flask import Flask, Response
 from flask import request, render_template, jsonify
@@ -112,6 +112,7 @@ def get_order_details_complex_create(orderID):
             rsp = Response(json.dumps(res), status=200, content_type='application/JSON')
         else:
             rsp = Response("NOT FOUND", status=404, content_type='text/plain')
+        return rsp
     except Exception as e:
         print(f"Path: /orderDetailsComplex/<orderID>/details")
         rsp = Response("INTERNAL ERROR", status=500, content_type='text/plain')
