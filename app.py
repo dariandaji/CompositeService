@@ -6,8 +6,8 @@ import re
 
 import requests
 import grequests
-from gevent import monkey
-monkey.patch_all()
+#from gevent import monkey
+#monkey.patch_all()
 
 from flask import Flask, Response
 from flask import request, render_template, jsonify
@@ -49,11 +49,11 @@ def get_order_details(orderID):
         res = json.dumps(res, default=str)
         rsp = Response(res, status=200, content_type='application/JSON')
         print(f"Elapsed Time: {datetime.now() - s}")
-        return rsp
 
     except Exception as e:
         print(f"Path: /orderDetails/<orderID>\nException: {e}")
         rsp = Response("INTERNAL ERROR", status=500, content_type='text/plain')
+    return rsp
 
 
 @app.route('/orderDetailsAsync/<orderID>', methods=["GET"])
@@ -84,11 +84,12 @@ def get_order_details_async(orderID):
         res = json.dumps(res, default=str)
         rsp = Response(res, status=200, content_type='application/JSON')
         print(f"Elapsed Time: {datetime.now() - s}")
-        return rsp
 
     except Exception as e:
         print(f"Path: /orderDetailsAsync/<orderID>\nException: {e}")
         rsp = Response("INTERNAL ERROR", status=500, content_type='text/plain')
+
+    return rsp
 
 
 @app.route('/orderDetailsComplex/<orderID>', methods=["GET"])
@@ -98,11 +99,12 @@ def get_order_details_complex(orderID):
         response = jsonify(f"POST Request will be created at {location}")
         response.status_code = 201
         response.headers['location'] = location
-        return response
 
     except Exception as e:
         print(f"Path: /orderDetailsComplex/<orderID>\nException: {e}")
-        rsp = Response("INTERNAL ERROR", status=500, content_type='text/plain')
+        response = Response("INTERNAL ERROR", status=500, content_type='text/plain')
+
+    return response
 
 
 @app.route('/orderDetailsComplex/<orderID>/details', methods=["GET"])
