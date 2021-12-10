@@ -6,8 +6,8 @@ import re
 
 import requests
 import grequests
-#from gevent import monkey
-#monkey.patch_all()
+from gevent import monkey
+monkey.patch_all()
 
 from flask import Flask, Response
 from flask import request, render_template, jsonify
@@ -74,6 +74,7 @@ def get_order_details_async(orderID):
             collect_responses.append(g.status_code)
             collect_details.append(json.loads(g.text))
 
+        collect_details = list(map(lambda x: {'data': x} if isinstance(x, list) else x, collect_details))
 
         for r in collect_responses:
             if r!=200:
